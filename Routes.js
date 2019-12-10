@@ -91,8 +91,18 @@ const App = createSwitchNavigator({
     // Login : {
     //   screen : LoginScreen
     // } ,
-    LoginStack : LoginStack,
-    AppStack : AppStack
+    LoginStack : {
+      screen : LoginStack,
+      navigationOptions : {
+        header : null
+      }
+    } ,
+    AppStack : {
+      screen : AppStack,
+      navigationOptions : {
+        header : null
+      }
+    }
   },{
     initialRouteName: 'LoginStack'
   }
