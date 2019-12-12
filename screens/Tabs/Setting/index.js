@@ -13,7 +13,7 @@ import HelpScreen from "./HelpScreen";
     MyData: { screen: MyDataScreen, navigationOptions : { tabBarLabel: 'Mis datos' } },
     Security: { screen: SecurityScreen, navigationOptions : { tabBarLabel: 'Seguridad' } },
     Adjustment: { screen: AdjustmentScreen, navigationOptions : { tabBarLabel: 'Ajustes' } },
-    Help: { screen: HelpScreen, navigationOptions : { tabBarLabel: 'Ayuda' } },
+    Help: { screen: HelpScreen, navigationOptions : { tabBarLabel: 'Salir' } },
   },
   {
     initialRouteName: 'MyData',

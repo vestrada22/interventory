@@ -70,12 +70,8 @@ class HomeScreen extends React.Component {
   constructor(props){
     super(props)
    
-    console.log('HomeScreen token ' + token )
   }
 
-  componentDidMount(){
- 
-  }
 
 
   // keyExtractor = (item, index) => index.toString()

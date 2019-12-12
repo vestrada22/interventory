@@ -674,19 +674,53 @@ class SignInScreen extends React.Component {
 
     this.state = {
       username : "",
-      password : ""
+      password : "",
+      token : false
     }
+  }
+
+  componentDidUpdate(){
+      this.setState({
+          token : false
+      })
   }
 
 
   componentDidMount(){
-    Token = async () => {
-        const resp = await AsyncStorage.getItem('token')
-    } 
-    console.log("Token " + JSON.stringify(Token()));
-       if(token() != null){
-         this.props.navigation.navigate('Home');
+    console.log('componentDidMount')
+    // let d = await AsyncStorage.getItem('token')
+    console.log('************** ' + JSON.stringify(AsyncStorage.getItem('token')))
+    console.log('************** ' + AsyncStorage.getItem('token') )
+
+
+     let getData = async () => {
+         try {
+           const value = await AsyncStorage.getItem('token')
+           if(value !== null) {
+             console.log('Value **************' + value)
+             this.setState({
+                 token : true
+             })
+           }else{
+            this.setState({
+                token : false
+            })
+           }
+         } catch(e) {
+             console.log('Error ************** ' + e)
+           // error reading value
+         }
        }
+ 
+       console.log('*************************** GETDATA ' + getData())
+
+        if( typeof( getData() ) == String){
+            console.log('Tiene token ' + getData());
+            this.props.navigation.navigate('Home');
+        }else{
+          console.log('No tiene token  ' + getData());
+        }
+
   }
 
 
@@ -718,6 +752,15 @@ class SignInScreen extends React.Component {
 
      if(data.data.data.token != null){
         AsyncStorage.setItem('token', data.data.data.token)
+        let storeData = async () => {
+            try {
+              await AsyncStorage.setItem('token', data.data.data.token)
+            } catch (e) {
+                console.log('Error al guardar token ' + e)
+              // saving error
+            }
+          }
+          storeData()
         this.props.navigation.navigate('Home');
      }else{
         showMessage('Datos incorrectos')
@@ -741,7 +784,27 @@ class SignInScreen extends React.Component {
   };
 
   render() {
+      console.log('Render')
+    // let getData = async () => {
+    //     try {
+    //       const value = await AsyncStorage.getItem('token')
+    //       if(value !== null) {
+    //         console.log('Value **************' + value)
+            
+    //       }
+    //     } catch(e) {
+    //         console.log('Error ************** ' + e)
+    //       // error reading value
+    //     }
+    //   }
+    //   console.log('RENDER ************* ' + typeof( getData() ) != String )
+    // if( typeof( getData() ) != String )
+
+    if(!this.state.token)
+        return this.props.navigation.navigate('Home');
+    else
     return (
+        
       <View>
         <MessageBar />
         <View style={styles.logoContainer}>
