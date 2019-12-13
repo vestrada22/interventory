@@ -40,6 +40,7 @@ const AppNavigator  = createStackNavigator({
 const AppDrawer = createBottomTabNavigator(
   {
     // Drawer : AppNavigator,
+    
     Home: {
         screen: HomeScreen,
         showIcon : true,

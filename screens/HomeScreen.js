@@ -135,7 +135,7 @@ class HomeScreen extends React.Component {
             // <FlatList
             //   data={list}
             //   renderItem={({ item }) => 
-            <Item title={l.name} />
+            <Item key={i} title={l.name} />
             // }
             //   keyExtractor={item => item.id}
             // />

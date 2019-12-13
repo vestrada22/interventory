@@ -1,10 +1,15 @@
 import React from "react";
-import { View, Text, Button, Image } from "react-native";
-import { Card, ListItem } from "react-native-elements";
+import { View, Text, Button, Image, Dimensions, SafeAreaView } from "react-native";
+import { Card, ListItem, Input } from "react-native-elements";
+import { ScrollView } from "react-native-gesture-handler";
 // import PhotoUpload  from "react-native-photo-upload";
 // import ImagePicker from 'react-native-image-picker'
 
-import styles from "./../../styles";
+import {instance} from './../../../config/user'
+import AsyncStorage from "@react-native-community/async-storage";
+
+
+const { width : WIDTH } = Dimensions.get('window')
 
 const users = [
  {
@@ -14,12 +19,70 @@ const users = [
 //  ... // more users here
 ];
 
+let t = ""
+
 class MyDataScreen extends React.Component {
   constructor(props){
     super(props)
-    //  state = {
-    //     photo: null,
+    console.log('Constructor MyDataScreen ')
+      this.state = {
+        name : "",
+        lastName : "",
+        dateOfBirth : "",
+        placeOfBirth : "",
+        gender : "",
+        language : "",
+        educationLevel : "",
+        maritalStatus : "",
+        numberPeople : "",
+        job : "",
+        montlyIncome :"",
+        photo: null,
+        token : ""
+     }
+
+    //  let getData = async () => {
+    //   try {
+    //     const value = await AsyncStorage.getItem('token')
+    //     if(value !== null) {
+    //       console.log('Value **************' + value)
+    //       this.setState({
+    //           token : value
+    //       })
+    //     }else{
+    //      this.setState({
+    //          token : value
+    //      })
+    //     }
+    //   } catch(e) {
+    //       console.log('Error ************** ' + e)
+    //     // error reading value
+    //   }
     // }
+
+    // console.log('*************************** GETDATA ' + getData())
+     
+    let a =AsyncStorage.getItem('token').then(r => {
+      console.log('----------------*   ' + r);
+      t = r;
+      return r;
+    }
+      )
+      console.log('//////////////////////' + t)
+    
+     let data = instance.post(`/api/details`, 
+     {
+      headers: {'Authorization': "Bearer " + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsic2VydmljZSJdLCJzY29wZSI6WyJyZWFkIl0sImV4cCI6MTU3NjI0ODMwOCwiYXV0aG9yaXRpZXMiOlsiQ0xJRU5UIl0sImp0aSI6IjAxNTA4ZmI1LTRlYmYtNDZkNC05MGExLWQ2N2Q1YzA4YjFmZSIsImNsaWVudF9pZCI6ImNsaWVudCJ9.F2y3Io-dFuiL6RQAdPlbztJcilgZLBH_SRBMkNgNaLg'}
+      })
+      .then((result) => {
+        console.log('Result update_userprofile ' + result)
+      }).catch((err) => {
+        console.log('Error en update_userprofile ' + err)
+      });
+
+      console.log('Data ' + data + ' token ' + AsyncStorage.getItem('token').then(r => 
+        console.log('----------------*   ' + r)))
+
   }
 
 
@@ -34,6 +97,23 @@ class MyDataScreen extends React.Component {
 //     })
 //   }
 
+  //  sendData = () => {
+  //    console.log('SendData')
+  //  }
+   
+   componentDidUpdate(){
+     console.log('componentDidUpdate')
+
+     let data = instance.post(
+       `/api/update_userprofile?firstname=${this.state.name}&lastname=${this.state.lastName}&date_of_birth=${this.state.dateOfBirth}&gender=${this.state.gender}&language=${this.state.language}`)
+       .then((result) => {
+         console.log('Result update_userprofile ' + result)
+       }).catch((err) => {
+         console.log('Error en update_userprofile ' + err)
+       });
+      
+       console.log('Data ' + data)
+    }
 
   render() {
       //  const { photo } = this.state
@@ -77,66 +157,106 @@ class MyDataScreen extends React.Component {
           // </View>
 
 
-        //  <Card containerStyle={{padding: 0}} >
-        //  {
-        //      users.map((u, i) => {
-        //      return (
-        //          <ListItem
-        //          key={i}
-        //          roundAvatar
-        //          title={u.name}
-        //          avatar={{uri:u.avatar}}
-        //          />
-        //      );
-        //      })
-        //  }
-        //  </Card>
-    //     <Card title="CARD WITH DIVIDER">
-    //     {
-    //         users.map((u, i) => {
-    //         return (
-    //             <View key={i} style={styles.user}>
-    //             <Image
-    //                 style={styles.image}
-    //                 resizeMode="cover"
-    //                 source={{ uri: u.avatar }}
-    //             />
-    //             <Text style={styles.name}>{u.name}</Text>
-    //             </View>
-    //         );
-    //         })
-    //     }
-    //     </Card>
+       
 
-    //      <Card containerStyle={{padding: 0}} >
-    //     {
-    //         users.map((u, i) => {
-    //         return (
-    //             <ListItem
-    //             key={i}
-    //             roundAvatar
-    //             title={u.name}
-    //             avatar={{uri:u.avatar}}
-    //             />
-    //         );
-    //         })
-    //     }
-    //     </Card>
+      <View>
+        
+      <SafeAreaView >
+        <ScrollView>
+        <Image
+          style={{
+            alignSelf: 'center',
+            height: 150,
+            width: WIDTH ,
+            borderWidth: 2,
+            borderColor : 'black',
+            borderRadius: 1
+          }}
+          source={{uri: ''}}
+          resizeMode="stretch"
+      />
+      
 
-         <Card
-             title='HELLO WORLD'
-             image={require('../../../assets/images/perfil.png')}>
-                 <Text >Duvan Mejia</Text>
-             <Text style={{marginBottom: 10}}>
-             The idea with React Native Elements is more about component structure than actual design.
-             </Text>
-             <Button
-             icon={{name: 'code'}}
-             backgroundColor='#03A9F4'
-             buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-             title='VIEW NOW' />
-         </Card>
-    //   </View>
+      <Input
+        id="name"
+        placeholder='Nombre'
+        value={this.state.name}
+        onChangeText={(name) => this.setState({name})}
+        name="name"
+      />
+
+      <Input
+        placeholder='Apellidos'
+        value={this.state.lastName}
+        onChangeText={(lastName) => this.setState({lastName})}
+        onBlur={() => this.sendData()}
+        name="lastName"
+        id="lastName"
+      />  
+
+      <Input
+        placeholder='Fecha de nacimiento'
+        value={this.state.dateOfBirth}
+        onChangeText={(dateOfBirth) => this.setState({dateOfBirth})}
+        name="dateOfBirth"
+        id="dateOfBirth"
+      />
+
+      <Input
+        placeholder='Lugar de nacimiento'
+        value={this.state.placeOfBirth}
+        onChangeText={(placeOfBirth) => this.setState({placeOfBirth})}
+        name="placeOfBirth"
+        id="placeOfBirth"
+      />
+
+      <Input
+        placeholder='Genero'
+        value={this.state.gender}
+        onChangeText={(gender) => this.setState({gender})}
+        name="gender"
+        id="gender"
+      />
+
+      <Input
+        placeholder='Lenguaje'
+        value={this.state.language}
+        onChangeText={(language) => this.setState({language})}
+        name="language"
+        id="language"
+      />
+
+      <Input
+        placeholder='Nivel de educacion'
+        value={this.state.educationLevel}
+        onChangeText={(educationLevel) => this.setState({educationLevel})}
+        name="educationLevel"
+        id="educationLevel"
+      />
+
+
+      <Input
+        placeholder='Numero de personas'
+        value={this.state.numberPeople}
+        onChangeText={(numberPeople) => this.setState({numberPeople})}
+        id="numberPeople"
+        name="numberPeople"
+      />
+
+
+      <Input
+        placeholder='Trabajo'
+        value={this.state.job}
+        onChangeText={(job) => this.setState({job})}
+        name="job"
+        id="job"
+      />
+
+
+
+          </ScrollView>
+      </SafeAreaView>
+     </View>
     );
   }
 }

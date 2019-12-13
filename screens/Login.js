@@ -680,9 +680,9 @@ class SignInScreen extends React.Component {
   }
 
   componentDidUpdate(){
-      this.setState({
-          token : false
-      })
+    //   this.setState({
+    //       token : false
+    //   })
   }
 
 
@@ -747,7 +747,11 @@ class SignInScreen extends React.Component {
         tenantId:  "sm"
       }	
     }
-    let data = await instance.post(`/login?email=duvanmejiaocm@gmail.com&password=admin`)
+    
+    let data = await instance.post(`/login`, {
+        email:this.state.username,password:this.state.password})
+
+    // let data = await instance.post(`/login?email=duvanmejiaocm@gmail.com&password=admin`)
      console.log('La data es ' + data.data.data.token)
 
      if(data.data.data.token != null){
@@ -800,7 +804,8 @@ class SignInScreen extends React.Component {
     //   console.log('RENDER ************* ' + typeof( getData() ) != String )
     // if( typeof( getData() ) != String )
 
-    if(!this.state.token)
+    console.log('El valor del token es '+ this.state.token)
+    if(this.state.token)
         return this.props.navigation.navigate('Home');
     else
     return (
