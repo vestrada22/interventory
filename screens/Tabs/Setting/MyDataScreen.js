@@ -3,7 +3,7 @@ import {View, Image, Dimensions, SafeAreaView} from 'react-native';
 import {Input} from 'react-native-elements';
 import {ScrollView} from 'react-native-gesture-handler';
 
-import {instance, getToken} from './../../../config/user';
+import {instance, getToken, getDetails} from './../../../config/user';
 
 const {width: WIDTH} = Dimensions.get('window');
 
@@ -29,12 +29,20 @@ class MyDataScreen extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    const userInfo = await getDetails()
+      console.log('========>>> ',userInfo.data);
+    this.setState({
+      name : userInfo.data.firstname
+    })
+  }
+
   componentDidUpdate() {
     console.log('componentDidUpdate');
 
     let data = instance
       .post(
-        `/api/update_userprofile?firstname=${this.state.name}&lastname=${this.state.lastName}&date_of_birth=${this.state.dateOfBirth}&gender=${this.state.gender}&language=${this.state.language}`,
+        `/update_userprofile?firstname=${this.state.name}&lastname=${this.state.lastName}&date_of_birth=${this.state.dateOfBirth}&gender=${this.state.gender}&language=${this.state.language}`,
       )
       .then(result => {
         console.log('Result update_userprofile ' + result);

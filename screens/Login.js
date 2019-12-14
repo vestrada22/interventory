@@ -495,6 +495,7 @@ class SignInScreen extends React.Component {
 
     if (data.data.data.token != null) {
       AsyncStorage.setItem('token', data.data.data.token);
+      console.log(data.data.data.token)
       let storeData = async () => {
         try {
           await AsyncStorage.setItem('token', data.data.data.token);

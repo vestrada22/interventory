@@ -1,21 +1,18 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
-let token = ''
-
 export const getToken = async () => {
   const _TOKEN = 'token';
   try {
     const value = await AsyncStorage.getItem(_TOKEN);
-    token = value
+    return value;
   } catch (error) {
     throw error;
   }
 };
 
 export const instance = axios.create({
-  baseURL: 'http://quickr.wmt.media',
+  baseURL: 'http://quickr.wmt.media/api',
   timeout: 5000,
   responseType: 'json',
   headers: {
@@ -23,15 +20,13 @@ export const instance = axios.create({
   },
 });
 
-export const getDetails = () => {
-  instance
-    .post(`http://quickr.wmt.media/api/details`, {
+export const getDetails = async () => {
+  const token = await getToken();
+  return instance
+    .get(`/userprofile`, {
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${JSON.stringify(getToken())}`,
-      }
+        'Authorization': `Bearer ${token}`
+      },
     })
     .then(result => result.data);
 };
-
-console.log(JSON.stringify(getToken()));
